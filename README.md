@@ -1,19 +1,17 @@
-# QuiO Data Visualization
+## QuiO Data Visualization
 
 ![image](/screenshots/graph.png)
 
-## To run locally:
+### To run locally:
 
-## Clone repo & npm install. Open index.html in Chrome browser.
+Clone repo & npm install. Open index.html in Chrome browser.
 
-## Chart features:
+### Chart features:
 
+Mouseover individual points (circles) to see values.
 ![image](/screenshots/dotHover.png)
 
-## Mouseover individual points (circles) to see values.
-
+Mouseover individual lines to see names of corresponding data sets.
 ![image](/screenshots/lineHover.png)
 
-## Mouseover individual lines to see names of corresponding data sets.
-
-## Scroll up/down to zoom in/out.
+Scroll up/down to zoom in/out.
