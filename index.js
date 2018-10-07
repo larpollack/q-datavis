@@ -2227,8 +2227,8 @@ let data = [
   }
 ];
 
-let width = 500;
-let height = 300;
+let width = 1000;
+let height = 850;
 let margin = 50;
 let duration = 250;
 
@@ -2243,11 +2243,11 @@ let pointOpacityLineHover = "0.25";
 let pointRadius = 3;
 let pointRadiusHover = 6;
 
-let formatTime = d3.timeFormat("%B %d, %Y");
+let parseDate = d3.timeParse("%Y-%m-%d");
 data.forEach(function(d) {
   d.values.forEach(function(d) {
-    d.date = formatTime(d.date);
-    d.value = +d.value;
+    d.date = parseDate(d.date);
+    d.value = Number(d.value);
   });
 });
 
@@ -2258,14 +2258,14 @@ let xScale = d3
 
 let yScale = d3
   .scaleLinear()
-  .domain([0, d3.max(data[0].values, d => d.value)])
+  .domain([0, d3.max(data[2].values, d => d.value)])
   .range([height - margin, 0]);
 
 let yellow = d3.interpolateYlGn(0), // "rgb(255, 255, 229)"
   yellowGreen = d3.interpolateYlGn(0.5), // "rgb(120, 197, 120)"
   green = d3.interpolateYlGn(1); // "rgb(0, 69, 41)"
 
-let color = d3.scaleSequential(d3.interpolateWarm);
+let color = d3.scaleOrdinal(d3.schemePRGn[6]);
 
 let svg = d3
   .select("#linechart")
@@ -2353,17 +2353,26 @@ lines
   .append("circle")
   .attr("cx", d => xScale(d.date))
   .attr("cy", d => yScale(d.value))
-  .attr("r", pointRadiusHover)
+  .attr("r", pointRadius)
   .style("opacity", pointOpacity)
   .on("mouseover", function(d) {
+    d3.select(this)
+      .transition()
+      .duration(duration)
+      .attr("r", pointRadiusHover);
+  })
+  .on("mouseout", function(d) {
     d3.select(this)
       .transition()
       .duration(duration)
       .attr("r", pointRadius);
   });
 
-let xAxis = d3.axisBottom(xScale).ticks(5);
-let yAxis = d3.axisLeft(yScale).ticks(5);
+let xAxis = d3.axisBottom(xScale).ticks(15);
+let yAxis = d3
+  .axisLeft(yScale)
+  .ticks(15)
+  .tickValues([0, 2, 5, 10, 20, 30, 50, 80, 100, 150, 200, 250, 350, 450, 550]);
 
 svg
   .append("g")
