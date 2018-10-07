@@ -2,7 +2,7 @@ svg {
   font-family: Sans-Serif, Arial;
 }
 .line {
-  stroke-width: 2;
+  stroke-width: 3;
   fill: none;
 }
 
@@ -15,5 +15,5 @@ svg {
 }
 
 .title-text {
-  font-size: 12px;
+  font-size: 14px;
 }

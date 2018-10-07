@@ -2243,6 +2243,12 @@ let pointOpacityLineHover = "0.25";
 let pointRadius = 3;
 let pointRadiusHover = 6;
 
+// let zoom = d3
+//   .zoom()
+//   .scaleExtent([1, 5])
+//   .extent([100, 100], [width - 100, height - 100])
+//   .on("zoom", zoomed);
+
 let parseDate = d3.timeParse("%Y-%m-%d");
 data.forEach(function(d) {
   d.values.forEach(function(d) {
@@ -2272,6 +2278,11 @@ let svg = d3
   .append("svg")
   .attr("width", width + margin + "px")
   .attr("height", height + margin + "px")
+  .call(
+    d3.zoom().on("zoom", function() {
+      svg.attr("transform", d3.event.transform);
+    })
+  )
   .append("g")
   .attr("transform", `translate(${margin}, ${margin})`);
 
@@ -2296,7 +2307,7 @@ lines
       .text(d.name)
       .attr("text-anchor", "middle")
       .attr("x", (width - margin) / 2)
-      .attr("y", 5);
+      .attr("y", 350);
   })
   .on("mouseout", function(d) {
     svg.select(".title-text").remove();
@@ -2368,6 +2379,19 @@ lines
       .attr("r", pointRadius);
   });
 
+// let svgViewport = d3
+//   .select("body")
+//   .append("svg")
+//   .attr("width", width)
+//   .attr("height", height)
+//   .style("background", "black");
+
+// let innerSpace = svgViewport
+//   .append("g")
+//   .attr("class", "inner_space")
+//   .attr("transform", "translate(" + 60 + "," + 30 + ")")
+//   .call(zoom);
+
 let xAxis = d3.axisBottom(xScale).ticks(15);
 let yAxis = d3
   .axisLeft(yScale)
@@ -2389,3 +2413,31 @@ svg
   .attr("transform", "rotate(-90)")
   .attr("fill", "#000")
   .text("Total values");
+
+// let gX = innerSpace
+//   .append("g")
+//   .attr("class", "axis axis--x")
+//   .attr("transform", "translate(0," + height + ")")
+//   .call(xAxis);
+
+// let gY = innerSpace
+//   .append("g")
+//   .attr("class", "axis axis--y")
+//   .call(yAxis);
+
+// let view = innerSpace
+//   .append("rect")
+//   .attr("class", "zoom")
+//   .attr("width", width)
+//   .attr("height", height)
+//   .call(zoom);
+
+function zoomed() {
+  let new_xScale = d3.event.transform.rescaleX(xScale);
+  let new_yScale = d3.event.transform.rescaleY(yScale);
+
+  gX.call(xAxis.scale(new_xScale));
+  gY.call(yAxis.scale(new_yScale));
+
+  lines.attr("transform", d3.event.transform);
+}
